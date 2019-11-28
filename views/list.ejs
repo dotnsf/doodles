@@ -51,7 +51,7 @@ function delete_doodle( id ){
       type: 'DELETE',
       url: '/doodle/' + id,
       success: function( result ){
-        location.href = '/list';
+        location.href = '/doodles';
       },
       error: function( err ){
         console.log( err );
