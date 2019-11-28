@@ -1,0 +1,79 @@
+<%- include('./header', { user: user, page: 'doodle', doodle: doodle }) %>
+
+<title>Doodles</title>
+<script>
+var base_url = location.origin + '/';
+
+$(function(){
+  //. ヒストリバック無効化
+  if( window.history && window.history.pushState ){
+    history.pushState( "nohb", null, null );
+    $(window).on( "popState", function( evt ){
+      if( !event.originalEvent.state ){
+        history.pushState( "nohb", null, null );
+        return;
+      }
+    });
+  }
+
+	init();
+});
+
+function init(){
+  $('#cdiv').html( '<canvas width="80%" height="50%" id="mycanvas"></canvas>' );
+
+  //. リサイズ時に Canvas サイズを変更する
+  $(window).on( 'load resize', function(){
+    resized();
+  });
+  resized();
+}
+
+function resized(){
+  var browserWidth = window.innerWidth;
+  var browserHeight = window.innerHeight;
+  var canvas = document.getElementById( 'mycanvas' );
+  if( canvas && canvas.getContext ){
+    canvas.width = browserWidth * 0.8;
+    canvas.height = browserHeight * 0.6;
+
+    var ctx = canvas.getContext( '2d' );
+    var background = new Image();
+    background.src = '/image/<%= doodle._id %>';
+    background.onload = function(){
+      ctx.drawImage( background, 0, 0, canvas.width, canvas.height );
+    }
+  }
+}
+
+function edit_doodle( id ){
+  window.location.href = '/?id=' + id;
+}
+</script>
+<style type="text/css">
+html, body{
+  text-align: center;
+  background-color: #fafafa;
+  font-size: 20px;
+  color: #333;
+}
+#mycanvas{
+  border: 1px solid #333;
+}
+</style>
+</head>
+<body>
+
+<%- include('./navi', { page: 'doodle', user: user, doodle: doodle }) %>
+
+<div id="canvas_div">
+  <div id="cdiv"></div>
+  <br/>
+  <div id="doodle_text"><%= doodle.text %></div>
+<% if( user && user.screen_name == doodle.username ){ %>
+  <br/>
+  <button id="edit_doodle_btn" class="btn btn-warning" onClick="edit_doodle('<%= doodle._id %>')">編集</button>
+<% } %>
+</div>
+
+<%- include('./footer', { page: 'doodle' }) %>
