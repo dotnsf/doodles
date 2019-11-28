@@ -10,3 +10,5 @@ exports.twitter_consumer_key = '';
 exports.twitter_consumer_secret = '';
 
 exports.superSecret = 'doodles';
+
+exports.base = 'http://localhost:3000/';

@@ -186,23 +186,23 @@ app.get( '/', function( req, res ){
     var token = req.session.token;
     jwt.verify( token, settings.superSecret, function( err, user ){
       if( err ){
-        res.render( 'index', { status: true, user: null, doodle: doodle, id: id } );
+        res.render( 'index', { status: true, user: null, doodle: doodle, id: id, base: settings.base } );
       }else{
         if( id ){
           db.get( id, null, function( err, body, header ){
             if( err ){
-              res.render( 'index', { status: true, user: user, doodle: doodle, id: id } );
+              res.render( 'index', { status: true, user: user, doodle: doodle, id: id, base: settings.base } );
             }else{
-              res.render( 'index', { status: true, user: user, doodle: body, id: id } );
+              res.render( 'index', { status: true, user: user, doodle: body, id: id, base: settings.base } );
             }
           });
         }else{
-          res.render( 'index', { status: true, user: user, doodle: doodle, id: id } );
+          res.render( 'index', { status: true, user: user, doodle: doodle, id: id, base: settings.base } );
         }
       }
     });
   }else{
-    res.render( 'index', { status: true, user: null, doodle: doodle, id: id } );
+    res.render( 'index', { status: true, user: null, doodle: doodle, id: id, base: settings.base } );
   }
 });
 
@@ -236,7 +236,7 @@ app.get( '/doodles', function( req, res ){
       //. 自分のデータだけを検索
       db.list( { include_docs: true }, function( err, body ){
         if( err ){
-          res.render( 'list', { status: true, user: user, doodles: doodles } );
+          res.render( 'list', { status: true, user: user, doodles: doodles, base: settings.base } );
         }else{
           var total = body.total_rows;
           body.rows.forEach( function( doc ){
@@ -255,12 +255,12 @@ app.get( '/doodles', function( req, res ){
             }
           }
 
-          res.render( 'list', { status: true, user: user, doodles: doodles} );
+          res.render( 'list', { status: true, user: user, doodles: doodles, base: settings.base } );
         }
       });
     });
   }else{
-    res.render( 'list', { status: true, user: null, doodles: doodles } );
+    res.render( 'list', { status: true, user: null, doodles: doodles, base: settings.base } );
   }
 });
 
@@ -270,28 +270,28 @@ app.get( '/doodle/:id', function( req, res ){
     if( db ){
       db.get( id, null, function( err, body, header ){
         if( err ){
-          res.render( 'doodle', { status: false, user: null, doodle: null, error: err } );
+          res.render( 'doodle', { status: false, user: null, doodle: null, error: err, base: settings.base } );
         }else{
           //res.render( 'doodle', { status: true, user: null, doodle: body } );
           if( req.session && req.session.token ){
             var token = req.session.token;
             jwt.verify( token, settings.superSecret, function( err, user ){
               if( err ){
-                res.render( 'doodle', { status: true, user: null, doodle: body } );
+                res.render( 'doodle', { status: true, user: null, doodle: body, base: settings.base } );
               }else{
-                res.render( 'doodle', { status: true, user: user, doodle: body } );
+                res.render( 'doodle', { status: true, user: user, doodle: body, base: settings.base } );
               }
             });
           }else{
-            res.render( 'doodle', { status: true, user: null, doodle: body } );
+            res.render( 'doodle', { status: true, user: null, doodle: body, base: settings.base } );
           }
         }
       });
     }else{
-      res.render( 'doodle', { status: false, doodle: null, error: 'db is not initialized.' } );
+      res.render( 'doodle', { status: false, doodle: null, error: 'db is not initialized.', base: settings.base } );
     }
   }else{
-    res.render( 'doodle', { status: false, doodle: null, error: 'parameter id needed.' } );
+    res.render( 'doodle', { status: false, doodle: null, error: 'parameter id needed.', base: settings.base } );
   }
 });
 
