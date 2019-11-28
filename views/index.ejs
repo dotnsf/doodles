@@ -228,18 +228,23 @@ function resized(){
   if( canvas && canvas.getContext ){
     canvas.width = browserWidth * 0.8;
     canvas.height = browserHeight * 0.6;
+
 <% if( doodle ){ %>
-    var ctx = canvas.getContext( '2d' );
-    var background = new Image();
-    background.src = '/image/<%= doodle._id %>';
-    background.onload = function(){
-      ctx.drawImage( background, 0, 0, canvas.width, canvas.height );
+    if( !is_reset ){
+      var ctx = canvas.getContext( '2d' );
+      var background = new Image();
+      background.src = '/image/<%= doodle._id %>';
+      background.onload = function(){
+        ctx.drawImage( background, 0, 0, canvas.width, canvas.height );
+      }
     }
 <% } %>
   }
 }
 
+var is_reset = false;
 function resetCanvas( no_reset_unredo ){
+  is_reset = true;
   init();
   resized();
 
@@ -435,6 +440,23 @@ html, body{
 <body>
 
 <%- include('./navi', { page: 'index', user: user, doodle: null }) %>
+
+<div class="container">
+  <!-- href="https://twitter.com/share?url=[URL]&text=[text]" -->
+  <a id="share_twitter" title="<%= __('navi.share_twitter') %>" href="https://twitter.com/share?url=<%= base %>&text=%20doodles&hashtags=doodles" target="_blank">
+    <img src="/imgs/share_twitter.png"/>
+  </a>
+
+  <!-- href="https://www.facebook.com/share.php?u=[URL]" -->
+  <a id="share_facebook" title="<%= __('navi.share_twitter') %>" href="https://www.facebook.com/share.php?u=<%= base %>" onClick="window.open(this.href, 'FBwindow', 'width=650,height=450,menubar=no,toolbar=no,scrollbars=yes'); return false;">
+    <img src="/imgs/share_facebook.png"/>
+  </a>
+
+  <!-- href="https://social-plugins.line.me/lineit/share?url=[URL]" -->
+  <a id="share_line" title="<%= __('navi.share_line') %>" href="https://social-plugins.line.me/lineit/share?url=<%= base %>" onClick="window.open(this.href, 'Linewindow', 'width=650,height=450,menubar=no,toolbar=no,scrollbars=yes'); return false;">
+    <img src="/imgs/share_line.png"/>
+  </a>
+</div>
 
 <select id="select_color" name="select_color">
   <option style="color:black;" value="transparent"><%= __('common.color.transparent') %></option>

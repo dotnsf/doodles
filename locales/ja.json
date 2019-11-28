@@ -19,6 +19,9 @@
 	"common.button.post": "送信",
 	"common.comment": "コメント",
 	"common.history": "履歴",
+	"navi.share_twitter": "このページを Twitter でシェア",
+	"navi.share_facebook": "このページを facebook でシェア",
+	"navi.share_line": "このページを LINE でシェア",
 	"dummy": "dummy",
 	"header.else": "header.else"
 }

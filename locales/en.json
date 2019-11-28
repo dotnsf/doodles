@@ -19,5 +19,8 @@
   "common.button.post": "Post",
   "common.comment": "Comment",
   "common.history": "History",
+  "navi.share_twitter": "Share with Twitter",
+  "navi.share_facebook": "Share with facebook",
+	"navi.share_line": "Share with LINE",
   "dummy": "dummy"
 }

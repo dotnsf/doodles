@@ -66,6 +66,23 @@ html, body{
 
 <%- include('./navi', { page: 'doodle', user: user, doodle: doodle }) %>
 
+<div class="container">
+  <!-- href="https://twitter.com/share?url=[URL]&text=[text]" -->
+  <a id="share_twitter" title="<%= __('navi.share_twitter') %>" href="https://twitter.com/share?url=<%= base %>doodle/<%= doodle._id %>&text=%20<%= doodle && doodle.text ? doodle.text : 'doodles' %><%= doodle && doodle.username ? '&via=' + doodle.username : '' %>&hashtags=doodles" target="_blank">
+    <img src="/imgs/share_twitter.png"/>
+  </a>
+
+  <!-- href="https://www.facebook.com/share.php?u=[URL]" -->
+  <a id="share_facebook" title="<%= __('navi.share_twitter') %>" href="https://www.facebook.com/share.php?u=<%= base %>doodle/<%= doodle._id %>" onClick="window.open(this.href, 'FBwindow', 'width=650,height=450,menubar=no,toolbar=no,scrollbars=yes'); return false;">
+    <img src="/imgs/share_facebook.png"/>
+  </a>
+
+  <!-- href="https://social-plugins.line.me/lineit/share?url=[URL]" -->
+  <a id="share_line" title="<%= __('navi.share_line') %>" href="https://social-plugins.line.me/lineit/share?url=<%= base %>doodle/<%= doodle._id %>" onClick="window.open(this.href, 'Linewindow', 'width=650,height=450,menubar=no,toolbar=no,scrollbars=yes'); return false;">
+    <img src="/imgs/share_line.png"/>
+  </a>
+</div>
+
 <div id="canvas_div">
   <div id="cdiv"></div>
   <br/>
