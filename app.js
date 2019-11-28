@@ -234,6 +234,30 @@ app.get( '/doodles', function( req, res ){
       var offset = req.query.offset ? parseInt( req.query.offset ) : 0;
 
       //. 自分のデータだけを検索
+      /* この find() を使う方法だと最大 25 個しか返ってこない
+      var q = {
+        selector: {
+          username: { "$eq": user.screen_name }
+        }
+      };
+      db.find( q ).then( function( body ){
+        body.docs.forEach( function( doc ){
+          //. doc = { _id: '_id', type: 'daydata', datetime: '20190801', created: '2019-10-01', producers: 6, consumers: 100 }
+          doc.timestamp = timestamp2datetime( doc.timestamp );
+          doodles.push( _doc );
+        }
+
+        if( offset || limit ){
+          if( offset + limit > total ){
+            doodles = doodles.slice( offset );
+          }else{
+            doodles = doodles.slice( offset, offset + limit );
+          }
+        }
+
+        res.render( 'list', { status: true, user: user, doodles: doodles, base: settings.base } );
+      });
+      */
       db.list( { include_docs: true }, function( err, body ){
         if( err ){
           res.render( 'list', { status: true, user: user, doodles: doodles, base: settings.base } );
