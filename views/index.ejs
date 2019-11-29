@@ -287,6 +287,8 @@ function save(){
   formData.append( 'text', $('#doodle_text').val() );
 
   var id = $('#doodle_id').val();
+  $('#save_btn').prop( 'disabled', 'disabled' );
+  $('#save_btn').html( '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span class="sr-only">Loading..</span>' );
   if( id ){
     $.ajax({
       type: 'PUT',
@@ -295,9 +297,12 @@ function save(){
       contentType: false,
       processData: false,
       success: function( data, dataType ){
-        console.log( data );
+        //console.log( data );
+        window.location.href = '/doodles';
       },
       error: function( jqXHR, textStatus, errorThrown ){
+        $('#save_btn').prop( 'disabled', '' );
+        $('#save_btn').html( '<% __('common.button.save') %>' );
         console.log( textStatus + ': ' + errorThrown );
       }
     });
@@ -309,9 +314,12 @@ function save(){
       contentType: false,
       processData: false,
       success: function( data, dataType ){
-        console.log( data );
+        //console.log( data );
+        window.location.href = '/doodles';
       },
       error: function( jqXHR, textStatus, errorThrown ){
+        $('#save_btn').prop( 'disabled', '' );
+        $('#save_btn').html( '<% __('common.button.save') %>' );
         console.log( textStatus + ': ' + errorThrown );
       }
     });
@@ -470,17 +478,17 @@ html, body{
   <option value="10">10</option>
 </select>
 
-<input type="button" class="btn btn-xs btn-secondary p-0" id="setbg_btn" value="<%= __('common.button.background') %>" onClick="setBG();"/>
-<a href="#" class="btn btn-xs btn-secondary p-0" data-toggle="modal" data-target="#myModal" id="comment_btn"><i class="fas fa-font"></i></a>
+<input type="button" class="btn btn-secondary" id="setbg_btn" value="<%= __('common.button.background') %>" onClick="setBG();"/>
+<a href="#" class="btn btn-secondary" data-toggle="modal" data-target="#myModal" id="comment_btn"><i class="fas fa-font"></i></a>
 
 <div id="canvas_div">
   <div id="cdiv"></div>
 
   <br/>
-  <input type="button" class="btn btn-xs" id="undo_btn" value="<" onClick="undo();" disabled="disabled"/>
-  <input type="button" class="btn btn-xs btn-warning" value="<%= __('common.button.reset') %>" onClick="resetCanvas();"/>
-  <input type="button" class="btn btn-xs btn-primary" id="save_btn" value="<%= __('common.button.save') %>" onClick="save();"<% if( !user ){%> disabled<%}%>/>
-  <input type="button" class="btn btn-xs" id="redo_btn" value=">" onClick="redo();" disabled="disabled"/>
+  <input type="button" class="btn" id="undo_btn" value="<" onClick="undo();" disabled="disabled"/>
+  <input type="button" class="btn btn-warning" value="<%= __('common.button.reset') %>" onClick="resetCanvas();"/>
+  <input type="button" class="btn btn-primary" id="save_btn" onClick="save();" value="<%= __('common.button.save') %>"<% if( !user ){%> disabled<%}%>/>
+  <input type="button" class="btn" id="redo_btn" value=">" onClick="redo();" disabled="disabled"/>
 </div>
 
 <div class="modal bd-example-modal-lg fade" id="myModal" tabindex="-1" role="dialog" aria-labbelledby="myModal" aria-hidden="true">
