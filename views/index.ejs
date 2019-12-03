@@ -191,6 +191,69 @@ function init(){
     }
   });
 
+  //. Pointer Events
+  canvas.addEventListener( "pointermove", function( e ){
+    //. ポインターが動いたら座標値を取得
+    var t = e; //e.changedTouches[0];
+    var rect = e.target.getBoundingClientRect();
+    //mouse.x = e.pageX - rect.left - borderWidth;
+    //mouse.y = e.pageY - rect.top - borderWidth;
+    mouse.x = ( isAndroid() ? t.pageX : e.pageX ) - rect.left - borderWidth;
+    mouse.y = ( isAndroid() ? t.pageY : e.pageY ) - rect.top - borderWidth;
+
+    //. isDrawがtrueのとき描画
+    if( mouse.isDrawing ){
+      var color = $('#select_color').val();
+      if( color == 'transparent' ){
+        ctx.globalCompositeOperation = 'destination-out';
+      }else{
+        ctx.globalCompositeOperation = 'source-over';
+      }
+
+      ctx.beginPath();
+      ctx.lineWidth = parseInt( $('#select_linewidth').val() );
+      ctx.lineCap = 'round';
+      ctx.moveTo( mouse.startX, mouse.startY );
+      ctx.lineTo( mouse.x, mouse.y );
+      if( color != 'transparent' ){
+        ctx.strokeStyle = color;
+      }
+      ctx.stroke();
+      mouse.startX = mouse.x;
+      mouse.startY = mouse.y;
+
+      if( stroke ){
+        stroke.xys.push( [ mouse.x, mouse.y ] );
+      }
+    }
+  });
+  //. ポインターにタッチしたら、描画OK(myDrawをtrue)
+  canvas.addEventListener( "pointerdown", function( e ){
+    var t = e; //e.changedTouches[0];
+    var rect = t.target.getBoundingClientRect();
+    mouse.isDrawing = true;
+    mouse.startX = t.pageX - rect.left - borderWidth;
+    mouse.startY = t.pageY - rect.top - borderWidth;
+
+    stroke = {};
+    stroke.color = $('#select_color').val();
+    stroke.width = parseInt( $('#select_linewidth').val() );
+    stroke.xys = [ [ mouse.startX, mouse.startY ] ];
+  });
+  //. ポインターを上げたら、描画禁止(myDrawをfalse)
+  canvas.addEventListener( "pointerup", function( e ){
+    mouse.isDrawing = false;
+    sendImage();
+
+    if( stroke ){
+      undos.push( stroke );
+      $('#undo_btn').prop( 'disabled', false );
+      stroke = null;
+      redos = [];
+      $('#redo_btn').prop( 'disabled', true );
+    }
+  });
+
   $('#select_color').change( function(){
     var color = $(this).val();
     if( color == 'white' ){
